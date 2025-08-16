@@ -5,28 +5,26 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.13 (latest patch)
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: ${{ matrix.python-version }}
           check-latest: true
 
       - name: Install dependencies
-        run: |
-          make install
+        run: make install
 
       - name: Lint with pylint
-        run: |
-          make lint
+        run: make lint
 
       - name: Test with pytest
-        run: |
-          make test
+        run: make test
 
       - name: Format code
-        run: |
-          make format
+        run: make format
